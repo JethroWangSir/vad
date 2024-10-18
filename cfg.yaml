@@ -1,7 +1,7 @@
 threshold: 3.5
 sample_rate: &sr 16000
 device: cpu
-ckpt: sgvad.pth
+ckpt: SG-VAD--val_loss=4.9373-epoch=120-last.ckpt
 
 
 preprocessor:
