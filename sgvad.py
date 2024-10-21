@@ -25,6 +25,7 @@ class SGVAD:
             wave = torch.tensor(wave)
         if not isinstance(wave, torch.Tensor):
             wave = torch.tensor(wave)
+        wave = self.check_audio_length(wave, 0.63)
         wave = wave.reshape(1, -1)
         wave_len = torch.tensor([wave.size(-1)]).reshape(1)
         processed_signal, processed_signal_len = self.preprocessor(input_signal=wave, length=wave_len)
@@ -36,6 +37,13 @@ class SGVAD:
 
     def load_audio(self, fpath):
         return librosa.load(fpath, sr=self.cfg.sample_rate)[0]
+    
+    def check_audio_length(self, wave, duration):
+        min_audio_len = int(16000 * duration)
+        if wave.size(0) < min_audio_len:
+            padding = min_audio_len - wave.size(0)
+            wave = torch.nn.functional.pad(wave, (0, padding))
+        return wave
 
     @classmethod
     def init_from_ckpt(cls):
