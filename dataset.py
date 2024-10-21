@@ -1,5 +1,5 @@
 import os
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 
 class AVA(Dataset):
     def __init__(self, root_dir):
@@ -36,7 +36,14 @@ class AVA(Dataset):
 
 if __name__ == "__main__":
     test_dataset = AVA('/share/nas165/aaronelyu/Datasets/AVA-speech/')
-    audio_path, label = test_dataset[0]
-    print(f'Test dataset size: {len(test_dataset)}')
-    print(f'Audio path: {audio_path}, Label: {label}')
+    # audio_path, label = test_dataset[0]
+    # print(f'Test dataset size: {len(test_dataset)}')
+    # print(f'Audio path: {audio_path}, Label: {label}')
 
+    test_loader = DataLoader(test_dataset, batch_size=1)
+    for batch in test_loader:
+        print(f'Batch: {batch}')
+        audio_path, label = batch
+        print(f"Audio Path: {audio_path[0]}")
+        print(f"Label: {label.item()}")
+        break

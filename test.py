@@ -23,6 +23,8 @@ all_preds = []
 # Test loop
 with torch.no_grad():
     for audio_path, label in tqdm(test_loader, desc='Testing'):
+        audio_path, label = audio_path[0], label.item()
+
         # Predict using SGVAD
         prediction = sgvad.predict(audio_path)
 
