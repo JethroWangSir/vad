@@ -22,7 +22,17 @@ def main(cfg):
         trainer.fit(full_model)
         if full_model.prepare_test(trainer):
             trainer.test(full_model)
-
+        
+        # 訓練完成後儲存為您的 sgvad.pth 格式
+        print("訓練完成，正在封裝模型參數...")
+        # 建立 SGVAD 物件以便使用其 save_ckpt 方法
+        sgvad_instance = SGVAD(
+            preprocessor=full_model.preprocessor,
+            model=full_model.encoder, # NeMo Classification Model 的主幹通常是 encoder
+            cfg=cfg
+        )
+        sgvad_instance.save_ckpt()
+        print(f"模型已成功儲存至: {os.path.abspath('./sgvad.pth')}")
 
 if __name__ == '__main__':
     main()
