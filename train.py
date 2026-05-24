@@ -12,7 +12,7 @@ import time
 def main(cfg):
     logging.info(f'Hydra config: {OmegaConf.to_yaml(cfg)}')
     original_cfg = cfg.copy()
-    for seed in range(10):
+    for seed in [0]:
         cfg = original_cfg.copy()
         seed_everything(seed)
         trainer = pl.Trainer(**cfg.trainer)
