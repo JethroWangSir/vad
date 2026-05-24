@@ -31,8 +31,9 @@ def main(cfg):
             model=full_model.encoder, # NeMo Classification Model 的主幹通常是 encoder
             cfg=cfg
         )
-        sgvad_instance.save_ckpt()
-        print(f"模型已成功儲存至: {os.path.abspath('./sgvad.pth')}")
+        ckpt_path = f'./{cfg.exp_manager.exp_dir}/sgvad.pth'
+        sgvad_instance.save_ckpt(ckpt_path)
+        print(f"模型已成功儲存至: {ckpt_path}")
 
 if __name__ == '__main__':
     main()
