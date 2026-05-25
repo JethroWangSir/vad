@@ -1,6 +1,6 @@
 threshold: 3.5
 sample_rate: &sr 16000
-device: cpu
+device: cuda
 ckpt: sgvad.pth
 
 

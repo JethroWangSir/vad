@@ -47,9 +47,9 @@ class SGVAD:
         vad.load_state_dict(ckpt['vad'], strict=True)
         return cls(preprocessor, vad, cfg)
 
-    def save_ckpt(self):
+    def save_ckpt(self, fpath="./sgvad.pth"):
         ckpt_dict = {"preprocessor": self.preprocessor.state_dict(), "vad": self.model.state_dict()}
-        torch.save(ckpt_dict, './sgvad.pth')
+        torch.save(ckpt_dict, fpath)
 
 
 if __name__ == "__main__":
