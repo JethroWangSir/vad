@@ -6,6 +6,7 @@ from nemo.core.config import hydra_runner
 from nemo.utils import logging
 from nemo.utils.exp_manager import exp_manager
 import time
+import torch
 
 from sgvad import SGVAD
 
@@ -18,8 +19,8 @@ def main(cfg):
     if "checkpoint_callback_params" not in cfg.exp_manager:
         cfg.exp_manager.checkpoint_callback_params = {}
         
-    cfg.exp_manager.checkpoint_callback_params.save_top_k = 3
-    cfg.exp_manager.checkpoint_callback_params.save_last = True
+    cfg.exp_manager.checkpoint_callback_params.save_top_k = 3        # 儲存 Top 3 模型
+    cfg.exp_manager.checkpoint_callback_params.save_last = True      # 儲存最後一輪模型
     cfg.exp_manager.checkpoint_callback_params.monitor = "val_loss"  # 監控驗證集的 Loss
     cfg.exp_manager.checkpoint_callback_params.mode = "min"          # 數值越低越好
 
@@ -38,6 +39,9 @@ def main(cfg):
         # 訓練結束後，自動封裝 Top 3 與 Last 模型
         exp_dir = cfg.exp_manager.get('exp_dir', 'exp_name')
         checkpoint_callback = trainer.checkpoint_callback
+
+        # 動態補上 device 屬性，滿足 SGVAD 初始化需求
+        cfg.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         # --- 處理 Top K (前三名) ---
         if hasattr(checkpoint_callback, 'best_k_models'):
